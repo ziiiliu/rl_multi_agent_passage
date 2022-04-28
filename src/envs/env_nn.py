@@ -18,6 +18,8 @@ import pygame
 
 from scipy.spatial.transform import Rotation as R
 
+from utils.dynamics_model import PSNN
+
 X = 0
 Y = 1
 
@@ -35,7 +37,7 @@ STATE_REACHED_GOAL = 3  # goal reached
 STATE_FINISHED = 4  # goal reached and reward bonus given
 
 
-class PassageEnv(VectorEnv):
+class NNPassageEnv(VectorEnv):
     def __init__(self, config):
         self.cfg = config
         action_space = gym.spaces.Tuple(
@@ -75,6 +77,10 @@ class PassageEnv(VectorEnv):
         self.device = torch.device(self.cfg["device"])
         self.vec_p_shape = (self.cfg["num_envs"], self.cfg["n_agents"], 2)
 
+        # shape = (num of agents, num of envs, past-state dimsension)
+        self.input_dim = self.cfg["input_dim"]
+        self.nn_input = torch.zeros((self.cfg["n_agents"], self.cfg["num_envs"], self.input_dim * (self.cfg["n_visible"]+1)))
+
         self.vector_reset()
 
         self.obstacles = [
@@ -95,6 +101,12 @@ class PassageEnv(VectorEnv):
             .tolist()
         )
         self.display = pygame.display.set_mode(size)
+
+        self.dynamics_model = PSNN(n_visible=self.cfg["n_visible"], n_output=self.input_dim, n_layer=3, input_dim=self.input_dim)
+        # if self.cfg["dynamics_model_path"] is not None:
+        #     self.dynamics_model.load_state_dict(torch.load(self.cfg["dynamics_model_path"]))
+        # else:
+        #     raise ValueError("Model path not provided")
 
     def create_state_tensor(self):
         return torch.zeros(self.vec_p_shape, dtype=torch.float32).to(self.device)
@@ -244,11 +256,7 @@ class PassageEnv(VectorEnv):
         desired_vs = torch.clip(
             torch.Tensor(actions).to(self.device), -self.cfg["max_v"], self.cfg["max_v"]
         )
-
-        desired_as = (desired_vs - self.measured_vs) / self.cfg["dt"]
-        possible_as = torch.clip(desired_as, -self.cfg["max_a"], self.cfg["max_a"])
-        possible_vs = self.measured_vs + possible_as * self.cfg["dt"]
-
+        print(desired_vs.shape)
         previous_ps = self.ps.clone().to(self.device)
 
         # check if next position collisides with other agents or wall
@@ -256,8 +264,19 @@ class PassageEnv(VectorEnv):
         rewards = torch.zeros(self.cfg["num_envs"], self.cfg["n_agents"])
         next_ps = self.ps.clone()
         for i in range(self.cfg["n_agents"]):
+            self.nn_input[i] = torch.cat([self.nn_input[i, :, self.input_dim:-self.input_dim].squeeze(), 
+                                            # torch.zeros(self.cfg["num_envs"], 1),
+                                            self.measured_vs[:, i, :].squeeze(), 
+                                            desired_vs[:, i, :].squeeze(), 
+                                            # torch.zeros(self.cfg["num_envs"], 1),
+                                            ], dim=1)    
+
+            res = self.dynamics_model(self.nn_input[i]).squeeze().detach()
+            print(self.measured_vs[:, i, :].shape)
+            possible_vs = torch.cat([self.measured_vs[:, i, :]], dim=1) + res
+            
             next_ps_agent = next_ps.clone()
-            next_ps_agent[:, i] += possible_vs[:, i] * self.cfg["dt"]
+            next_ps_agent[:, i] += possible_vs * self.cfg["dt"]
             agents_ds = self.compute_agent_dists(next_ps_agent)[:, i]
             agents_coll = torch.min(agents_ds, dim=1)[0] <= 2 * self.cfg["agent_radius"]
             # only update pos if there are no collisions
@@ -326,7 +345,7 @@ class PassageEnv(VectorEnv):
         return []
 
 
-class PassageEnvRender(PassageEnv):
+class NNPassageEnvRender(NNPassageEnv):
     metadata = {
         "render.modes": ["human", "rgb_array"],
     }
@@ -418,7 +437,7 @@ class PassageEnvRender(PassageEnv):
 
 
 if __name__ == "__main__":
-    env = PassageEnvRender(
+    env = NNPassageEnvRender(
         {
             "world_dim": (4.0, 6.0),
             "dt": 0.05,

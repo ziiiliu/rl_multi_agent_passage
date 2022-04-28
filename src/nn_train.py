@@ -9,7 +9,7 @@ from ray.rllib.agents.callbacks import DefaultCallbacks
 from ray.rllib.env import BaseEnv
 from ray.rllib.evaluation import MultiAgentEpisode, RolloutWorker
 from ray.rllib.policy import Policy
-from envs.env import PassageEnvRender
+from envs.env_nn import NNPassageEnvRender
 from models.model import Model
 from ray.rllib.models import ModelCatalog
 from rllib_multi_agent_demo.multi_trainer import MultiPPOTrainer
@@ -26,7 +26,7 @@ def initialize():
         object_store_memory=2 * (10 ** 9),
     )
 
-    register_env("passage_env", lambda config: PassageEnvRender(config))
+    register_env("passage_env", lambda config: NNPassageEnvRender(config))
     ModelCatalog.register_custom_model("model", Model)
     ModelCatalog.register_custom_action_dist(
         "hom_multi_action", TorchHomogeneousMultiActionDistribution
@@ -34,16 +34,16 @@ def initialize():
 
 
 def train():
-    num_workers = 4
+    num_workers = 1
     tune.run(
         MultiPPOTrainer,
         # restore="/home/jb2270/ray_results/PPO/PPO_world_0_2020-04-04_23-01-16c532w9iy/checkpoint_100/checkpoint-100",
         checkpoint_freq=10,
         keep_checkpoints_num=2,
         checkpoint_score_attr="min-episode_len_mean",
-        local_dir="./results",
+        local_dir="./nn_results",
         # local_dir="/tmp",
-        stop={"training_iteration": 50},
+        stop={"training_iteration": 10},
         config={
             "seed": 0,
             "framework": "torch",
@@ -72,7 +72,7 @@ def train():
             },
             "env_config": {
                 "world_dim": (4.0, 6.0),
-                "dt": 0.05,
+                "dt": 0.01,
                 "num_envs": 32,
                 "device": "cpu",
                 "n_agents": 2, # 5
@@ -93,6 +93,9 @@ def train():
                 "max_v": 1.5,
                 "max_a": 1.0,
                 "min_a": -1.0,
+                "n_visible": 10,
+                "input_dim": 2,
+                "dynamics_model_path": "D:\\CS\\Part III\\sim2real\\modelling\\ckpt\\2nd_collect_psnn_50_visible_differential.pt"
             },
             "render_env": True,
             "evaluation_interval": 50,
