@@ -34,7 +34,7 @@ def initialize():
 
 
 def train():
-    num_workers = 1
+    num_workers = 4
     tune.run(
         MultiPPOTrainer,
         # restore="/home/jb2270/ray_results/PPO/PPO_world_0_2020-04-04_23-01-16c532w9iy/checkpoint_100/checkpoint-100",
@@ -54,7 +54,7 @@ def train():
             "sgd_minibatch_size": 4096,
             "vf_clip_param": 100.0,
             "num_sgd_iter": 18,
-            "num_gpus": 0,
+            "num_gpus": 1,
             "num_workers": num_workers,
             "num_envs_per_worker": 32,
             "lr": 5e-5,
