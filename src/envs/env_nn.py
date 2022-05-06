@@ -256,7 +256,7 @@ class NNPassageEnv(VectorEnv):
         desired_vs = torch.clip(
             torch.Tensor(actions).to(self.device), -self.cfg["max_v"], self.cfg["max_v"]
         )
-        print(desired_vs.shape)
+        # print(desired_vs.shape)
         previous_ps = self.ps.clone().to(self.device)
 
         # check if next position collisides with other agents or wall
@@ -272,7 +272,7 @@ class NNPassageEnv(VectorEnv):
                                             ], dim=1)    
 
             res = self.dynamics_model(self.nn_input[i]).squeeze().detach()
-            print(self.measured_vs[:, i, :].shape)
+            # print(self.measured_vs[:, i, :].shape)
             possible_vs = torch.cat([self.measured_vs[:, i, :]], dim=1) + res
             
             next_ps_agent = next_ps.clone()
