@@ -97,7 +97,7 @@ def train():
                 "input_dim": 2,
                 "dynamics_model_path": "D:\\CS\\Part III\\sim2real\\modelling\\ckpt\\2nd_collect_psnn_50_visible_differential.pt"
             },
-            "render_env": True,
+            "render_env": False,
             "evaluation_interval": 50,
             "evaluation_num_episodes": 1,
             "evaluation_num_workers": 1,  # Run evaluation in parallel to training
