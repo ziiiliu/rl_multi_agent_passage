@@ -43,7 +43,7 @@ def train():
         checkpoint_score_attr="min-episode_len_mean",
         local_dir="./results",
         # local_dir="/tmp",
-        stop={"training_iteration": 50},
+        stop={"training_iteration": 500},
         config={
             "seed": 0,
             "framework": "torch",
@@ -54,7 +54,7 @@ def train():
             "sgd_minibatch_size": 4096,
             "vf_clip_param": 100.0,
             "num_sgd_iter": 18,
-            "num_gpus": 0,
+            "num_gpus": 1,
             "num_workers": num_workers,
             "num_envs_per_worker": 32,
             "lr": 5e-5,
@@ -94,7 +94,7 @@ def train():
                 "max_a": 1.0,
                 "min_a": -1.0,
             },
-            "render_env": True,
+            "render_env": False,
             "evaluation_interval": 50,
             "evaluation_num_episodes": 1,
             "evaluation_num_workers": 1,  # Run evaluation in parallel to training
