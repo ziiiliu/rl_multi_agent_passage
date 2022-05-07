@@ -95,7 +95,7 @@ def train():
                 "min_a": -1.0,
             },
             "render_env": False,
-            "evaluation_interval": 1,
+            "evaluation_interval": 10,
             "evaluation_num_episodes": 1,
             "evaluation_num_workers": 1,  # Run evaluation in parallel to training
             "evaluation_parallel_to_training": True,
