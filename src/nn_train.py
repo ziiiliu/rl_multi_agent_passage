@@ -100,7 +100,7 @@ def train():
             "render_env": False,
             "evaluation_interval": 50,
             "evaluation_num_episodes": 1,
-            "evaluation_num_workers": 1,  # Run evaluation in parallel to training
+            "evaluation_num_workers": 2,  # Run evaluation in parallel to training
             "evaluation_parallel_to_training": True,
             "evaluation_config": {
                 "record_env": "videos",
