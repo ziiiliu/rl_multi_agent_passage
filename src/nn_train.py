@@ -95,7 +95,7 @@ def train():
                 "min_a": -1.0,
                 "n_visible": 10,
                 "input_dim": 2,
-                "dynamics_model_path": "D:\\CS\\Part III\\sim2real\\modelling\\ckpt\\2nd_collect_psnn_50_visible_differential.pt"
+                "dynamics_model_path": "../model_ckpts/2nd_collect_psnn_10_visible_smoothed_differential.pt"
             },
             "render_env": False,
             "evaluation_interval": 50,

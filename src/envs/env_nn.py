@@ -103,10 +103,10 @@ class NNPassageEnv(VectorEnv):
         self.display = pygame.display.set_mode(size)
 
         self.dynamics_model = PSNN(n_visible=self.cfg["n_visible"], n_output=self.input_dim, n_layer=3, input_dim=self.input_dim)
-        # if self.cfg["dynamics_model_path"] is not None:
-        #     self.dynamics_model.load_state_dict(torch.load(self.cfg["dynamics_model_path"]))
-        # else:
-        #     raise ValueError("Model path not provided")
+        if self.cfg["dynamics_model_path"] is not None:
+            self.dynamics_model.load_state_dict(torch.load(self.cfg["dynamics_model_path"]))
+        else:
+            raise ValueError("Model path not provided")
 
     def create_state_tensor(self):
         return torch.zeros(self.vec_p_shape, dtype=torch.float32).to(self.device)
