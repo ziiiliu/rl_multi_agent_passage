@@ -440,7 +440,7 @@ if __name__ == "__main__":
     env = NNPassageEnvRender(
         {
             "world_dim": (4.0, 6.0),
-            "dt": 0.05,
+            "dt": 0.005,
             "num_envs": 3,
             "device": "cpu",
             "n_agents": 5,

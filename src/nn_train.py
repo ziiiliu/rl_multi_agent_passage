@@ -72,7 +72,7 @@ def train():
             },
             "env_config": {
                 "world_dim": (4.0, 6.0),
-                "dt": 0.01,
+                "dt": 0.005,
                 "num_envs": 32,
                 "device": "cpu",
                 "n_agents": 2, # 5
