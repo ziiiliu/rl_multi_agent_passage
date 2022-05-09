@@ -272,7 +272,7 @@ class NNPassageEnv(VectorEnv):
                                             ], dim=1)    
 
             res = self.dynamics_model(self.nn_input[i]).squeeze().detach()
-            # print(self.measured_vs[:, i, :].shape)
+            print(self.nn_input[i], res)
             possible_vs = torch.cat([self.measured_vs[:, i, :]], dim=1) + res
             
             next_ps_agent = next_ps.clone()
@@ -443,9 +443,9 @@ if __name__ == "__main__":
             "dt": 0.005,
             "num_envs": 3,
             "device": "cpu",
-            "n_agents": 5,
+            "n_agents": 2,
             "agent_formation": (
-                torch.Tensor([[-1, -1], [-1, 1], [0, 0], [1, -1], [1, 1]]) * 0.6
+                torch.Tensor([[-1, -1], [-1, 1]]) * 0.6
             ).tolist(),
             "placement_keepout_border": 1.0,
             "placement_keepout_wall": 1.5,
@@ -459,6 +459,9 @@ if __name__ == "__main__":
             "render_px_per_m": 160,
             "max_v": 10.0,
             "max_a": 5.0,
+            "n_visible": 10,
+            "input_dim": 2,
+            "dynamics_model_path": "D:\CS\Part III\sim2real\modelling\ckpt_may\\2nd_collect_psnn_10_visible_smoothed_differential.pt"
         }
     )
     import time
