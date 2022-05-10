@@ -53,16 +53,22 @@ class SimplePredictor(BaseNN):
             n_output=n_output,
             n_layer=n_layer,
         )
+        self.n_layer = n_layer
         self.activation = activation
         self.dropout = nn.Dropout(p=0.2)
+        if self.n_layer == 0:
+            self.input = nn.Linear(input_dim, n_output)
+            self.predict = None
     
     def forward(self, X):
-        res = F.relu(self.input(X))
         if self.activation is None:
+            res = self.input(X)
             for fc in self.fcs:
                 res = fc(res)
         else:
+            res = F.relu(self.input(X))
             for fc in self.fcs:
                 res = F.relu(self.dropout(fc(res)))
-        res = self.predict(res)
+        if self.n_layer != 0:
+            res = self.predict(res)
         return res
