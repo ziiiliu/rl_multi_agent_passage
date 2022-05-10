@@ -18,7 +18,7 @@ import pygame
 
 from scipy.spatial.transform import Rotation as R
 
-from utils.dynamics_model import PSNN
+from utils.dynamics_model import PSNN, SimplePredictor
 
 X = 0
 Y = 1
@@ -102,7 +102,9 @@ class NNPassageEnv(VectorEnv):
         )
         self.display = pygame.display.set_mode(size)
 
-        self.dynamics_model = PSNN(n_visible=self.cfg["n_visible"], n_output=self.input_dim, n_layer=3, input_dim=self.input_dim)
+        # self.dynamics_model = PSNN(n_visible=self.cfg["n_visible"], n_output=self.input_dim, n_layer=3, input_dim=self.input_dim)
+        self.dynamics_model = SimplePredictor(input_dim=22, n_hidden=64, n_output=2, n_layer=0, activation=None)
+        
         if self.cfg["dynamics_model_path"] is not None:
             self.dynamics_model.load_state_dict(torch.load(self.cfg["dynamics_model_path"]))
         else:
@@ -272,7 +274,7 @@ class NNPassageEnv(VectorEnv):
                                             ], dim=1)    
 
             res = self.dynamics_model(self.nn_input[i]).squeeze().detach()
-            print(self.nn_input[i], res)
+            # print(self.nn_input[i], res)
             possible_vs = torch.cat([self.measured_vs[:, i, :]], dim=1) + res
             
             next_ps_agent = next_ps.clone()
