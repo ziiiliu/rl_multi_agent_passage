@@ -43,7 +43,7 @@ def train():
         checkpoint_score_attr="min-episode_len_mean",
         local_dir="./nn_results",
         # local_dir="/tmp",
-        stop={"training_iteration": 500},
+        stop={"training_iteration": 2000},
         config={
             "seed": 0,
             "framework": "torch",
@@ -95,7 +95,7 @@ def train():
                 "min_a": -1.0,
                 "n_visible": 1,
                 "input_dim": 2,
-                "dynamics_model_path": "../model_ckpts/2nd_collect_simplepredictor_differential_0_layer_linear_2D.pt"
+                "dynamics_model_path": "../model_ckpts/2nd_collect_psnn_10_visible_smoothed_differential.pt"
             },
             "render_env": False,
             "evaluation_interval": 50,
