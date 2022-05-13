@@ -51,6 +51,7 @@ def export():
     checkpoint_file = checkpoint_path / (
         "checkpoint-" + str(int(checkpoint_path.name.split("_")[-1]))
     )
+    print(checkpoint_file)
     trainer.restore(str(checkpoint_file))
 
     jitmodel_path = Path(args.checkpoint) / "model.pt"
