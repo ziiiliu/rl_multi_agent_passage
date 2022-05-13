@@ -16,7 +16,7 @@ from rllib_multi_agent_demo.multi_action_dist import (
 
 
 def initialize():
-    ray.init(include_dashboard=False, object_store_memory=8 * 10 ** 9)
+    ray.init(include_dashboard=False, object_store_memory=4 * 10 ** 9)
     register_env("passage_env", lambda config: PassageEnvRender(config))
     ModelCatalog.register_custom_model("model", Model)
     ModelCatalog.register_custom_action_dist(
@@ -36,7 +36,6 @@ def export():
     checkpoint_path = Path(args.checkpoint)
     with open(checkpoint_path.parent / "params.json") as json_file:
         cfg = json.load(json_file)
-    print(f"config: {cfg}")
 
     trainer = MultiPPOTrainer(
         env=cfg["env"],
