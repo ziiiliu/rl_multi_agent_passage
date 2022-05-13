@@ -43,7 +43,7 @@ def train():
         checkpoint_score_attr="min-episode_len_mean",
         local_dir="./nn_results",
         # local_dir="/tmp",
-        stop={"training_iteration": 20},
+        stop={"training_iteration": 500},
         config={
             "seed": 0,
             "framework": "torch",
@@ -82,7 +82,7 @@ def train():
                 "placement_keepout_border": 1.0,
                 "placement_keepout_wall": 1.5,
                 "pos_noise_std": 0.0,
-                "max_time_steps": 2000,
+                "max_time_steps": 500,
                 "communication_range": 2.0,
                 "wall_width": 0.3,
                 "gap_length": 1.0,
