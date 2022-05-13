@@ -43,7 +43,7 @@ def train():
         checkpoint_score_attr="min-episode_len_mean",
         local_dir="./nn_results",
         # local_dir="/tmp",
-        stop={"training_iteration": 500},
+        stop={"training_iteration": 1000},
         config={
             "seed": 0,
             "framework": "torch",
@@ -72,12 +72,12 @@ def train():
             },
             "env_config": {
                 "world_dim": (4.0, 6.0),
-                "dt": 0.005,
+                "dt": 0.05,
                 "num_envs": 32,
                 "device": "cpu",
-                "n_agents": 2, # 5
+                "n_agents": 5, # 5
                 "agent_formation": (
-                    np.array([[-1, -1], [-1, 1]]) * 0.6  # np.array([[-1, -1], [-1, 1], [0, 0], [1, -1], [1, 1]]) * 0.6
+                    np.array([[-1, -1], [-1, 1], [0, 0], [1, -1], [1, 1]]) * 0.6
                 ).tolist(),
                 "placement_keepout_border": 1.0,
                 "placement_keepout_wall": 1.5,
