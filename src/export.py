@@ -36,6 +36,7 @@ def export():
     checkpoint_path = Path(args.checkpoint)
     with open(checkpoint_path.parent / "params.json") as json_file:
         cfg = json.load(json_file)
+    print(f"config: {cfg}")
 
     trainer = MultiPPOTrainer(
         env=cfg["env"],
