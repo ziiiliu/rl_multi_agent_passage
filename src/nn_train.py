@@ -93,10 +93,10 @@ def train():
                 "max_v": 1.5,
                 "max_a": 1.0,
                 "min_a": -1.0,
-                "n_visible": 10,
+                "n_visible": 1,
                 "input_dim": 2,
                 # "dynamics_model_path": "model_ckpts/2nd_collect_psnn_10_visible_smoothed_differential.pt",
-                "dynamics_model_path": "model_ckpts/2nd_collect_simplepredictor_10_visible_smoothed_differential_0_layer_linear.pt"
+                "dynamics_model_path": "model_ckpts/2nd_collect_simplepredictor_differential_0_layer_linear_2D.pt"
             },
             "render_env": False,
             "evaluation_interval": 50,
