@@ -93,7 +93,7 @@ def train():
                 "max_v": 1.5,
                 "max_a": 1.0,
                 "min_a": -1.0,
-                "n_visible": 10,
+                "n_visible": 1,
                 "input_dim": 2,
                 # "dynamics_model_path": "model_ckpts/2nd_psnn_50_visible_differential_smoothed.pt",
                 "dynamics_model_path": "model_ckpts/2nd_collect_simplepredictor_differential_0_layer_linear_2D.pt"
