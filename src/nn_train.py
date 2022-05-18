@@ -82,7 +82,7 @@ def train():
                 "placement_keepout_border": 1.0,
                 "placement_keepout_wall": 1.5,
                 "pos_noise_std": 0.0,
-                "max_time_steps": 500,
+                "max_time_steps": 1000,
                 "communication_range": 2.0,
                 "wall_width": 0.3,
                 "gap_length": 1.0,

@@ -275,7 +275,7 @@ class NNPassageEnv(VectorEnv):
 
             res = self.dynamics_model(self.nn_input[i]).squeeze().detach()
             # print(self.nn_input[i], res)
-            possible_vs = torch.cat([self.measured_vs[:, i, :]], dim=1) + res * (0.05/0.0055)
+            possible_vs = torch.cat([self.measured_vs[:, i, :]], dim=1) + res # * (0.05/0.0055)
             
             next_ps_agent = next_ps.clone()
             next_ps_agent[:, i] += possible_vs * self.cfg["dt"]
