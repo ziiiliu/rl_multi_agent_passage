@@ -111,7 +111,7 @@ def serve_config(
     cfg_change={},
     render_dir=None,
 ):
-    with Pool(32) as p:
+    with Pool(8) as p:
         results = p.starmap(
             run_trial,
             [
