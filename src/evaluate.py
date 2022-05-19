@@ -136,7 +136,7 @@ def serve():
     parser.add_argument("checkpoint")
     parser.add_argument("--seed", type=int, default=0)
     parser.add_argument("--episode_len", type=int, default=None)
-    parser.add_argument("--trials", type=int, default=1)
+    parser.add_argument("--trials", type=int, default=3)
     parser.add_argument("--comm_range", type=float, default=None)
     parser.add_argument(
         "--render_dir", type=str, default=None
